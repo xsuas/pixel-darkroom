@@ -29,8 +29,9 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/pixel_darkroom_deploy
           chmod 600 ~/.ssh/pixel_darkroom_deploy
-          ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
 
       - name: Deploy to Tencent Cloud server
         run: |
-          rsync -az --delete -e "ssh -i ~/.ssh/pixel_darkroom_deploy" dist/ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/var/www/pixel-darkroom/
+          rsync -az --delete \
+            -e "ssh -i ~/.ssh/pixel_darkroom_deploy -o StrictHostKeyChecking=no" \
+            dist/ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/var/www/pixel-darkroom/
